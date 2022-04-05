@@ -7,7 +7,7 @@ type Bank struct {
 }
 
 func (bank Bank) AddExchangeRate(currencyFrom string, currencyTo string, rate float64) {
-	exchange := currencyFrom + "->" + currencyTo
+	exchange := buildExchangeName(currencyFrom, currencyTo)
 	bank.exchangeRates[exchange] = rate
 }
 
@@ -18,7 +18,7 @@ func (bank Bank) Convert(money Money, currencyTo string) (*Money, error) {
 		return &moneyResult, nil
 	}
 
-	exchange := money.currency + "->" + currencyTo
+	exchange := buildExchangeName(money.currency, currencyTo)
 	rate, isValidExchange := bank.exchangeRates[exchange]
 
 	if !isValidExchange {
@@ -33,4 +33,8 @@ func NewBank() Bank {
 	return Bank{
 		exchangeRates: make(map[string]float64),
 	}
+}
+
+func buildExchangeName(currencyFrom string, currencyTo string) string {
+	return currencyFrom + "->" + currencyTo
 }

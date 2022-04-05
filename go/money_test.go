@@ -11,7 +11,7 @@ var bank stocks.Bank
 func initExchangeRates() {
 	bank = stocks.NewBank()
 	bank.AddExchangeRate("EUR", "USD", 1.2)
-	bank.AddExchangeRate("USD", "KRW", 1100)
+	bank.AddExchangeRate("USD", "KRW", 1100.0)
 }
 
 func TestMultiplication(t *testing.T) {

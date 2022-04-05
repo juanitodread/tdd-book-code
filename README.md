@@ -12,19 +12,20 @@ To understand the evolution and purpose of the code, you need the accompanying b
 In brief, use the following commands to run the tests for each language.
 
 ## Go
-```
+```shell
 cd go
 go test -v ./...
 ```
 
 ## JavaScript
-```
-node js/test_money.js
+```shell
+cd js
+npm run test
 ```
 
 ## Python
-```
-python3 py/test_money.py
+```shell
+python py/test_money.py
 ```
 # How to get the book
 

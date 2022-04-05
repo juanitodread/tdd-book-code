@@ -1,26 +1,33 @@
-const Money = require("./money");
+import Money from './money.js';
 
 class Bank {
-    constructor() {
-        this.exchangeRates = new Map();
+  constructor() {
+    this.exchangeRates = new Map();
+  }
+
+  addExchangeRate(currencyFrom, currencyTo, rate) {
+    const exchange = this._buildExchangeName(currencyFrom, currencyTo);
+    this.exchangeRates.set(exchange, rate);
+  }
+
+  convert(money, currency) {
+    if (money.currency === currency) {
+      return new Money(money.amount, money.currency);
     }
 
-    addExchangeRate(currencyFrom, currencyTo, rate) {
-        let key = currencyFrom + "->" + currencyTo;
-        this.exchangeRates.set(key, rate);
-    }
+    const exchange = this._buildExchangeName(money.currency, currency);
+    const rate = this.exchangeRates.get(exchange);
 
-    convert(money, currency) {
-        if (money.currency === currency) {
-            return new Money(money.amount, money.currency);
-        }
-        let key = money.currency + "->" + currency;
-        let rate = this.exchangeRates.get(key);
-        if (rate === undefined) {
-            throw new Error(key);
-        }
-        return new Money(money.amount * rate, currency);
+    if (!rate) {
+      throw new Error(exchange);
     }
+    
+    return new Money(money.amount * rate, currency);
+  }
+
+  _buildExchangeName(currencyFrom, currencyTo) {
+    return `${currencyFrom}->${currencyTo}`;
+  }
 }
 
-module.exports = Bank;
+export default Bank;

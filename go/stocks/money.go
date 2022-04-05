@@ -6,22 +6,37 @@ type Money struct {
 }
 
 func NewMoney(amount float64, currency string) Money {
-	return Money{amount, currency}
-}
-
-func (m Money) Times(multiplier int) Money {
-	return Money{amount: m.amount * float64(multiplier), currency: m.currency}
-}
-
-func (m Money) Divide(divisor int) Money {
-	return Money{amount: m.amount / float64(divisor), currency: m.currency}
-}
-
-func (m Money) Add(other *Money) *Money {
-	var result Money
-	if m.currency == other.currency {
-		result = Money{amount: m.amount + other.amount, currency: m.currency}
-		return &result
+	return Money{
+		amount:   amount,
+		currency: currency,
 	}
-	return nil
+}
+
+func (money Money) Times(multiplier float64) Money {
+	return Money{
+		amount:   money.amount * multiplier,
+		currency: money.currency,
+	}
+}
+
+func (money Money) Divide(divisor float64) Money {
+	return Money{
+		amount:   money.amount / divisor,
+		currency: money.currency,
+	}
+}
+
+func (money Money) Add(other *Money) *Money {
+	var result Money
+
+	if money.currency != other.currency {
+		return nil
+	}
+
+	result = Money{
+		amount:   money.amount + other.amount,
+		currency: money.currency,
+	}
+
+	return &result
 }

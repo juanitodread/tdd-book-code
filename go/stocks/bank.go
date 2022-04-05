@@ -6,28 +6,31 @@ type Bank struct {
 	exchangeRates map[string]float64
 }
 
-func (b Bank) AddExchangeRate(currencyFrom string, currencyTo string,
-	rate float64) {
-	key := currencyFrom + "->" + currencyTo
-	b.exchangeRates[key] = rate
+func (bank Bank) AddExchangeRate(currencyFrom string, currencyTo string, rate float64) {
+	exchange := currencyFrom + "->" + currencyTo
+	bank.exchangeRates[exchange] = rate
 }
 
-func (b Bank) Convert(money Money, currencyTo string) (convertedMoney *Money,
-	err error) {
-	var result Money
+func (bank Bank) Convert(money Money, currencyTo string) (*Money, error) {
+	var moneyResult Money
 	if money.currency == currencyTo {
-		result = NewMoney(money.amount, money.currency)
-		return &result, nil
+		moneyResult = NewMoney(money.amount, money.currency)
+		return &moneyResult, nil
 	}
-	key := money.currency + "->" + currencyTo
-	rate, ok := b.exchangeRates[key]
-	if ok {
-		result = NewMoney(money.amount*rate, currencyTo)
-		return &result, nil
+
+	exchange := money.currency + "->" + currencyTo
+	rate, isValidExchange := bank.exchangeRates[exchange]
+
+	if !isValidExchange {
+		return nil, errors.New(exchange)
 	}
-	return nil, errors.New(key)
+
+	moneyResult = NewMoney(money.amount*rate, currencyTo)
+	return &moneyResult, nil
 }
 
 func NewBank() Bank {
-	return Bank{exchangeRates: make(map[string]float64)}
+	return Bank{
+		exchangeRates: make(map[string]float64),
+	}
 }

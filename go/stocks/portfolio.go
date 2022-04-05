@@ -4,28 +4,37 @@ import "errors"
 
 type Portfolio []Money
 
-func (p Portfolio) Add(money Money) Portfolio {
-	p = append(p, money)
-	return p
+func (portfolio Portfolio) Add(money Money) Portfolio {
+	portfolio = append(portfolio, money)
+	return portfolio
 }
 
-func (p Portfolio) Evaluate(bank Bank, currency string) (*Money, error) {
+func (portfolio Portfolio) Evaluate(bank Bank, currency string) (*Money, error) {
 	totalMoney := NewMoney(0, currency)
 	failedConversions := make([]string, 0)
-	for _, m := range p {
-		if convertedMoney, err := bank.Convert(m, currency); err == nil {
-			totalMoney = *totalMoney.Add(convertedMoney)
+
+	for _, money := range portfolio {
+		convertedCurrency, err := bank.Convert(money, currency)
+		if err == nil {
+			totalMoney = *totalMoney.Add(convertedCurrency)
 		} else {
 			failedConversions = append(failedConversions, err.Error())
 		}
 	}
-	if len(failedConversions) == 0 {
-		return &totalMoney, nil
+
+	if len(failedConversions) > 0 {
+		failures := "["
+
+		for _, fail := range failedConversions {
+			failures = failures + fail + ", "
+		}
+
+		failures = failures[:len(failures)-2]
+
+		failures = failures + "]"
+
+		return nil, errors.New("Missing exchange rates: " + failures)
 	}
-	failures := "["
-	for _, f := range failedConversions {
-		failures = failures + f + ","
-	}
-	failures = failures + "]"
-	return nil, errors.New("Missing exchange rate(s):" + failures)
+
+	return &totalMoney, nil
 }

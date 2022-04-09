@@ -68,6 +68,26 @@ func TestDivisionByNegativeNumber(t *testing.T) {
 	assertNil(t, invalidMoney)
 }
 
+func TestAdd(t *testing.T) {
+	twoDollars := stocks.NewMoney(2, "USD")
+	fourDollars := stocks.NewMoney(4, "USD")
+
+	sixDollars, err := twoDollars.Add(&fourDollars)
+
+	assertEquals(t, stocks.NewMoney(6, "USD"), *sixDollars)
+	assertNil(t, err)
+}
+
+func TestAddDifferentCurrencies(t *testing.T) {
+	twoDollars := stocks.NewMoney(2, "USD")
+	fourEuros := stocks.NewMoney(4, "EUR")
+
+	invalidMoney, err := twoDollars.Add(&fourEuros)
+
+	assertEquals(t, "incompatible currencies: money1[USD] != money2[EUR]", err.Error())
+	assertNil(t, invalidMoney)
+}
+
 func assertEquals(t *testing.T, expectedResult interface{}, actualResult interface{}) {
 	if expectedResult != actualResult {
 		t.Errorf("Error: Expected [%+v], Got [%+v]", expectedResult, actualResult)

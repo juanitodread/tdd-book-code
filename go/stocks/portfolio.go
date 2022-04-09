@@ -16,7 +16,8 @@ func (portfolio Portfolio) Evaluate(bank Bank, currency string) (*Money, error) 
 	for _, money := range portfolio {
 		convertedCurrency, err := bank.Convert(money, currency)
 		if err == nil {
-			totalMoney = *totalMoney.Add(convertedCurrency)
+			sum, _ := totalMoney.Add(convertedCurrency)
+			totalMoney = *sum
 		} else {
 			failedConversions = append(failedConversions, err.Error())
 		}

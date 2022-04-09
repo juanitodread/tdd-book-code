@@ -40,17 +40,13 @@ func (money Money) Divide(divisor float64) (*Money, error) {
 	}, nil
 }
 
-func (money Money) Add(other *Money) *Money {
-	var result Money
-
+func (money Money) Add(other *Money) (*Money, error) {
 	if money.currency != other.currency {
-		return nil
+		return nil, fmt.Errorf("incompatible currencies: money1[%s] != money2[%s]", money.currency, other.currency)
 	}
 
-	result = Money{
+	return &Money{
 		amount:   money.amount + other.amount,
 		currency: money.currency,
-	}
-
-	return &result
+	}, nil
 }

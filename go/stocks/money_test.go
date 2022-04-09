@@ -32,12 +32,39 @@ func TestMultiplicationByZero(t *testing.T) {
 	assertNil(t, err)
 }
 
-func TestMultiplicationByNegative(t *testing.T) {
+func TestMultiplicationByNegativeNumber(t *testing.T) {
 	tenDollars := stocks.NewMoney(10.0, "USD")
 
 	invalidMoney, err := tenDollars.Times(-2)
 
 	assertEquals(t, "invalid multiplier: Negative value [-2.00]", err.Error())
+	assertNil(t, invalidMoney)
+}
+
+func TestDivision(t *testing.T) {
+	tenDollars := stocks.NewMoney(10, "USD")
+
+	fiveDollars, err := tenDollars.Divide(2)
+
+	assertEquals(t, stocks.NewMoney(5, "USD"), *fiveDollars)
+	assertNil(t, err)
+}
+
+func TestDivisionByZero(t *testing.T) {
+	tenDollars := stocks.NewMoney(10, "USD")
+
+	invalidMoney, err := tenDollars.Divide(0)
+
+	assertEquals(t, "invalid divisor: Zero value [0]", err.Error())
+	assertNil(t, invalidMoney)
+}
+
+func TestDivisionByNegativeNumber(t *testing.T) {
+	tenDollars := stocks.NewMoney(10, "USD")
+
+	invalidMoney, err := tenDollars.Divide(-2)
+
+	assertEquals(t, "invalid divisor: Negative value [-2.00]", err.Error())
 	assertNil(t, invalidMoney)
 }
 

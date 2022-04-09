@@ -2,7 +2,7 @@ package main
 
 import (
 	"reflect"
-	stocks "tdd/stocks"
+	"tdd/stocks"
 	"testing"
 )
 
@@ -12,15 +12,6 @@ func initExchangeRates() {
 	bank = stocks.NewBank()
 	bank.AddExchangeRate("EUR", "USD", 1.2)
 	bank.AddExchangeRate("USD", "KRW", 1100)
-}
-
-func TestDivision(t *testing.T) {
-	originalMoney := stocks.NewMoney(4002, "KRW")
-
-	actualMoneyAfterDivision := originalMoney.Divide(4)
-	expectedMoneyAfterDivions := stocks.NewMoney(1000.5, "KRW")
-
-	assertEquals(t, actualMoneyAfterDivision, expectedMoneyAfterDivions)
 }
 
 func TestAddition(t *testing.T) {

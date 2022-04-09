@@ -6,14 +6,30 @@ import (
 
 type Money struct {
 	amount   float64
-	currency string
+	currency Currency
 }
 
-func NewMoney(amount float64, currency string) Money {
+func NewMoney(amount float64, currency Currency) Money {
+	if !currency.exists() {
+		fmt.Printf("invalid currency: [%s]", currency)
+	}
+
 	return Money{
 		amount:   amount,
 		currency: currency,
 	}
+}
+
+func NewDollar(amount float64) Money {
+	return NewMoney(amount, Usd)
+}
+
+func NewEuro(amount float64) Money {
+	return NewMoney(amount, Eur)
+}
+
+func NewWon(amount float64) Money {
+	return NewMoney(amount, Krw)
 }
 
 func (money Money) Times(multiplier float64) (*Money, error) {

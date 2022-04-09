@@ -17,15 +17,35 @@ func main() {
 
 	res := hello.FizzBuzz("hello")
 	if res != nil {
-		println(*res)
+		fmt.Println(*res)
 	} else {
-		println("res is nil")
+		fmt.Println("res is nil")
 	}
 
 	res2 := hello.FizzBuzzRef(nil)
 	if res2 != nil {
-		println(*res2)
+		fmt.Println(*res2)
 	} else {
-		println("res is nil")
+		fmt.Println("res is nil")
+	}
+
+	myMap := map[string]float64{
+		"one": 1.0,
+		"two": 2.0,
+	}
+
+	fmt.Println(myMap)
+
+	var myPointer *map[string]float64 = &myMap
+
+	fmt.Println(myPointer)
+	fmt.Printf("This is *myPointer: %+v\n", *myPointer)
+
+	for key, val := range myMap {
+		fmt.Printf("[%s]=%f\n", key, val)
+	}
+
+	for index, char := range "a slice of chars" {
+		fmt.Printf("[%d:%c],", index, char)
 	}
 }

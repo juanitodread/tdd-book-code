@@ -1,6 +1,9 @@
 package stocks
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
 
 type Portfolio []Money
 
@@ -9,7 +12,11 @@ func (portfolio Portfolio) Add(money Money) Portfolio {
 	return portfolio
 }
 
-func (portfolio Portfolio) Evaluate(bank Bank, currency string) (*Money, error) {
+func (portfolio Portfolio) Evaluate(bank Bank, currency Currency) (*Money, error) {
+	if !currency.exists() {
+		return nil, fmt.Errorf("invalid currency: [%s]", currency)
+	}
+
 	totalMoney := NewMoney(0, currency)
 	failedConversions := make([]string, 0)
 
@@ -24,7 +31,7 @@ func (portfolio Portfolio) Evaluate(bank Bank, currency string) (*Money, error) 
 	}
 
 	if len(failedConversions) > 0 {
-		failures := "["
+		failures := ""
 
 		for _, fail := range failedConversions {
 			failures = failures + fail + ", "
@@ -32,9 +39,7 @@ func (portfolio Portfolio) Evaluate(bank Bank, currency string) (*Money, error) 
 
 		failures = failures[:len(failures)-2]
 
-		failures = failures + "]"
-
-		return nil, errors.New("Missing exchange rates: " + failures)
+		return nil, errors.New(failures)
 	}
 
 	return &totalMoney, nil

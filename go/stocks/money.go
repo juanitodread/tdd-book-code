@@ -1,5 +1,9 @@
 package stocks
 
+import (
+	"fmt"
+)
+
 type Money struct {
 	amount   float64
 	currency string
@@ -12,11 +16,14 @@ func NewMoney(amount float64, currency string) Money {
 	}
 }
 
-func (money Money) Times(multiplier float64) Money {
-	return Money{
+func (money Money) Times(multiplier float64) (*Money, error) {
+	if multiplier < 0 {
+		return nil, fmt.Errorf("invalid multiplier: Negative value [%.2f]", multiplier)
+	}
+	return &Money{
 		amount:   money.amount * multiplier,
 		currency: money.currency,
-	}
+	}, nil
 }
 
 func (money Money) Divide(divisor float64) Money {

@@ -14,15 +14,6 @@ func initExchangeRates() {
 	bank.AddExchangeRate("USD", "KRW", 1100)
 }
 
-func TestMultiplication(t *testing.T) {
-	fiver := stocks.NewMoney(5, "USD")
-
-	tenner := fiver.Times(2)
-	expectedTenner := stocks.NewMoney(10, "USD")
-
-	assertEquals(t, tenner, expectedTenner)
-}
-
 func TestDivision(t *testing.T) {
 	originalMoney := stocks.NewMoney(4002, "KRW")
 

@@ -53,10 +53,14 @@ func TestAdditionOfDollarsAndWons(t *testing.T) {
 }
 
 func TestAdditionWithMultipleExchangeRates(t *testing.T) {
+	exchangeRateEurToUsd, _ := stocks.NewExchangeRate(stocks.Eur, stocks.Usd, 1.2)
+	exchangeRateUsdToKrw, _ := stocks.NewExchangeRate(stocks.Usd, stocks.Krw, 1100)
+	exchangeRateKrwToUsd, _ := stocks.NewExchangeRate(stocks.Krw, stocks.Usd, 1.0/1100)
+
 	bank = stocks.NewBank()
-	bank.AddExchangeRate("EUR", "USD", 1.2)
-	bank.AddExchangeRate("USD", "KRW", 1100)
-	bank.AddExchangeRate("KRW", "USD", 1.0/1100)
+	bank.AddExchangeRate(*exchangeRateEurToUsd)
+	bank.AddExchangeRate(*exchangeRateUsdToKrw)
+	bank.AddExchangeRate(*exchangeRateKrwToUsd)
 
 	var portfolio stocks.Portfolio
 

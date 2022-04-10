@@ -8,39 +8,18 @@ import (
 var bank stocks.Bank
 
 func initExchangeRates() {
+	exchangeRateEurToUsd, _ := stocks.NewExchangeRate(stocks.Eur, stocks.Usd, 1.2)
+	exchangeRateUsdToKrw, _ := stocks.NewExchangeRate(stocks.Usd, stocks.Krw, 1100)
+
 	bank = stocks.NewBank()
-	bank.AddExchangeRate("EUR", "USD", 1.2)
-	bank.AddExchangeRate("USD", "KRW", 1100)
+	bank.AddExchangeRate(*exchangeRateEurToUsd)
+	bank.AddExchangeRate(*exchangeRateUsdToKrw)
 }
 
 func TestNewBank(t *testing.T) {
 	bank := stocks.NewBank()
 
 	assertNotNil(t, bank)
-}
-
-func TestAddExchangeRate(t *testing.T) {
-	bank := stocks.NewBank()
-
-	err := bank.AddExchangeRate(stocks.Eur, stocks.Usd, 1.3)
-
-	assertNil(t, err)
-}
-
-func TestAddExchangeRateInvalidFrom(t *testing.T) {
-	bank := stocks.NewBank()
-
-	err := bank.AddExchangeRate("invalid", stocks.Usd, 1.3)
-
-	assertEquals(t, "invalid currency: from = [invalid]", err.Error())
-}
-
-func TestAddExchangeRateInvalidTo(t *testing.T) {
-	bank := stocks.NewBank()
-
-	err := bank.AddExchangeRate(stocks.Eur, "invalid", 0.7)
-
-	assertEquals(t, "invalid currency: to = [invalid]", err.Error())
 }
 
 func TestConversionWithDifferentRatesBetweenTwoCurrencies(t *testing.T) {
@@ -52,7 +31,8 @@ func TestConversionWithDifferentRatesBetweenTwoCurrencies(t *testing.T) {
 	assertNil(t, err)
 	assertEquals(t, stocks.NewDollar(12), *eurosToDollars)
 
-	bank.AddExchangeRate(stocks.Eur, stocks.Usd, 1.3)
+	exchangeRate, _ := stocks.NewExchangeRate(stocks.Eur, stocks.Usd, 1.3)
+	bank.AddExchangeRate(*exchangeRate)
 
 	eurosToDollars, err = bank.Convert(tenEuros, stocks.Usd)
 

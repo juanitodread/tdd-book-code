@@ -14,19 +14,8 @@ func NewBank() Bank {
 	}
 }
 
-//@TODO: Make ExchangeRate struct
-func (bank Bank) AddExchangeRate(from Currency, to Currency, rate float64) error {
-	if !from.exists() {
-		return fmt.Errorf("invalid currency: from = [%s]", from)
-	}
-	if !to.exists() {
-		return fmt.Errorf("invalid currency: to = [%s]", to)
-	}
-
-	exchange := buildExchangeName(from, to)
-	bank.exchangeRates[exchange] = rate
-
-	return nil
+func (bank Bank) AddExchangeRate(exchangeRate ExchangeRate) {
+	bank.exchangeRates[exchangeRate.Id()] = exchangeRate.rate
 }
 
 func (bank Bank) Convert(money Money, to Currency) (*Money, error) {

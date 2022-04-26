@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"os"
 	"tdd/hello"
+	"tdd/samples"
 )
 
-func main() {
+func misc() {
 	var name = "Juan"
 	if len(os.Args) > 1 {
 		name = os.Args[1]
@@ -48,4 +49,10 @@ func main() {
 	for index, char := range "a slice of chars" {
 		fmt.Printf("[%d:%c],", index, char)
 	}
+}
+
+func main() {
+	// misc()
+	samples.Structs()
+	//samples.Concurrency()
 }
